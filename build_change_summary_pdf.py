@@ -31,21 +31,14 @@ class NumberedCanvas(canvas.Canvas):
         canvas.Canvas.save(self)
 
     def draw_page_decorations(self, page_count):
+        # Top running header is completely removed as requested
+        # Only simple, clean bottom footer is preserved
         self.saveState()
         self.setFont("Helvetica", 7.5)
         self.setFillColor(colors.HexColor("#64748b"))
-        # Top running header on pages > 1
-        if self._pageNumber > 1:
-            self.drawString(36, letter[1] - 25, "MI Net Growth Levels Management — Change Summary & Git Status")
-            self.drawRightString(letter[0] - 36, letter[1] - 25, "Branch: feature/mi-net-growth-levels")
-            self.setStrokeColor(colors.HexColor("#e2e8f0"))
-            self.setLineWidth(0.5)
-            self.line(36, letter[1] - 28, letter[0] - 36, letter[1] - 28)
-
-        # Bottom footer
         page_text = f"Page {self._pageNumber} of {page_count}"
         self.drawRightString(letter[0] - 36, 18, page_text)
-        doc_info = "SIA (Sales Incentive Automation) · PostgreSQL & Django REST Framework & React"
+        doc_info = "SIA (Sales Incentive Automation) · https://github.com/Sh3hann/mi-net-growth"
         self.drawString(36, 18, doc_info)
         self.setStrokeColor(colors.HexColor("#e2e8f0"))
         self.setLineWidth(0.5)
@@ -178,7 +171,8 @@ def build_pdf(filename="MI_Net_Growth_Levels_Change_Summary.pdf"):
 
     # ================= PAGE 1 =================
     elements.append(Paragraph("MI Net Growth Levels Management - Change Summary", title_style))
-    elements.append(Paragraph("Developer: Full Stack Developer &nbsp;|&nbsp; Branch: feature/mi-net-growth-levels &nbsp;|&nbsp; Date: November 2026", meta_style))
+    elements.append(Paragraph("<b>Developer:</b> Sh3hann &nbsp;|&nbsp; <b>Branch:</b> main / feature/mi-net-growth-levels &nbsp;|&nbsp; <b>Date:</b> November 2026", meta_style))
+    elements.append(Paragraph("<b>Repository:</b> https://github.com/Sh3hann/mi-net-growth.git", meta_style))
     elements.append(Paragraph("Implemented a full-stack system to manage MI Net Growth Levels for the SIA (Sales Incentive Automation) system using PostgreSQL, Django REST Framework, and React.js with full CRUD functionality, sequential NET_ID auto-generation, range contiguity/overlap prevention, file attachment uploads, and Role-Based Access Control (CFO, DGM, RM).", desc_style))
 
     # Master Table (15 rows matching reference)
@@ -225,7 +219,7 @@ def build_pdf(filename="MI_Net_Growth_Levels_Change_Summary.pdf"):
         (4, "Overlap Validation", "Model clean() verifies that no two Active records overlap in the lower_range to upper_range interval."),
     ]))
 
-    # views.py (growth_levels) on Page 1 (initial rows)
+    # views.py (growth_levels) on Page 1
     elements.extend(create_detail_block("views.py (growth_levels)", [
         (1, "CRUD Endpoints", "MiNetGrowthLevelViewSet provides POST (create), GET (list), GET /<id>/ (retrieve), PUT/PATCH (update), DELETE (destroy)."),
         (2, "Search & Filter", "Implemented ?search= (Level, NET_ID, Comments) and ?status=Active|Inactive query filtering."),
@@ -248,7 +242,7 @@ def build_pdf(filename="MI_Net_Growth_Levels_Change_Summary.pdf"):
     elements.extend(create_detail_block("urls.py", [
         (1, "DefaultRouter Route", "router.register(r'mi-net-growth-levels', MiNetGrowthLevelViewSet) creates full REST URL tree."),
         (2, "API Integration", "Mounted in growth_backend/urls.py under path('api/', include('growth_levels.urls'))."),
-        (3, "Media File Handler", "Added static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) to serve uploads in development."),
+        (3, "Media File Handler", "Added static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) to serve uploads in dev."),
     ]))
 
     # serializers.py
@@ -344,7 +338,7 @@ def build_pdf(filename="MI_Net_Growth_Levels_Change_Summary.pdf"):
     ]
     elements.append(make_table(flow_data, flow_col_widths))
 
-    # Testing Checklist on Page 3 (initial rows)
+    # Testing Checklist on Page 3
     test_col_widths = [22, 180, 338]
     elements.append(Paragraph("Testing Checklist", section_header_style))
     test_data_p3 = [
@@ -434,7 +428,7 @@ def build_pdf(filename="MI_Net_Growth_Levels_Change_Summary.pdf"):
     elements.append(Spacer(1, 10))
 
     # Git Status Section
-    elements.append(Paragraph("Git Status & Commit Log", section_header_style))
+    elements.append(Paragraph("Git Status & Repository State", section_header_style))
     git_box_style = ParagraphStyle(
         'GitBox',
         parent=styles['Normal'],
@@ -444,10 +438,15 @@ def build_pdf(filename="MI_Net_Growth_Levels_Change_Summary.pdf"):
         textColor=colors.HexColor('#0f172a'),
     )
     git_text = """
-<b>Branch:</b> feature/mi-net-growth-levels &nbsp;|&nbsp; <b>Commit:</b> 4e7d294 &nbsp;|&nbsp; <b>Author:</b> Full Stack Developer<br/>
-<b>Commit Message:</b> feat(mi-net-growth): complete full-stack implementation with Django ORM, REST API, React frontend, and Postman suite<br/>
+<b>Remote Origin:</b> https://github.com/Sh3hann/mi-net-growth.git<br/>
+<b>Branches Synced:</b> main, feature/mi-net-growth-levels (Up to date with origin)<br/>
+<b>Author:</b> Sh3hann &lt;akilshehan760@gmail.com&gt;<br/>
+<b>Commit Log:</b><br/>
+• 8831c9e (origin/main, main) chore: sync with GitHub origin main and retain full system documentation<br/>
+• 7d37abe docs(pdf): generate change summary and git status PDF documentation<br/>
+• 4e7d294 feat(mi-net-growth): complete full-stack implementation with Django ORM, REST API, React frontend, and Postman suite<br/>
 <br/>
-<b>Tracked Files in Repository (Clean Working Tree):</b><br/>
+<b>Tracked Files in Repository:</b><br/>
 • backend/growth_levels/models.py ..................... [SIA_MI_NET_GROWTH_LEVELS table model]<br/>
 • backend/growth_levels/views.py ...................... [MiNetGrowthLevelViewSet CRUD & RBAC]<br/>
 • backend/growth_levels/serializers.py ................ [DRF serializer with overlap validation]<br/>
