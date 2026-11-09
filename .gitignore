@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+backend/media/growth_attachments/*
+!backend/media/growth_attachments/.gitkeep
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.DS_Store
+Thumbs.db

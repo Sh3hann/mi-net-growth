@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "7a35c24e-b5f8-43ec-95d0-26478d10b789",
+		"name": "MI Net Growth Levels API",
+		"description": "Comprehensive Postman collection for MI Net Growth Levels full-stack system covering all CRUD operations, file uploads, range validation, and role-based access control.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "sample_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. List All Growth Levels",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""]
+				},
+				"description": "Retrieve paginated list of all MI Net Growth Levels."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Filter By Status (Active)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/?status=Active",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""],
+					"query": [
+						{
+							"key": "status",
+							"value": "Active"
+						}
+					]
+				},
+				"description": "Filter levels by status (Active / Inactive)."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Search Levels",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/?search=Silver",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""],
+					"query": [
+						{
+							"key": "search",
+							"value": "Silver"
+						}
+					]
+				},
+				"description": "Search records by Level name, NET_ID, or Comments."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get Statistics Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/statistics/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", "statistics", ""]
+				},
+				"description": "Get summary counts, active/inactive totals, average incentive %, and maximum range."
+			},
+			"response": []
+		},
+		{
+			"name": "5. Retrieve Single Record",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/{{sample_id}}/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", "{{sample_id}}", ""]
+				},
+				"description": "Retrieve details of a single growth level by Primary Key ID."
+			},
+			"response": []
+		},
+		{
+			"name": "6. Create New Record (JSON)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Role",
+						"value": "CFO",
+						"description": "Role header: CFO, DGM, or RM"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"level\": \"Tier 6 - Zenith Club\",\n    \"lower_range\": \"1500000.01\",\n    \"upper_range\": \"3000000.00\",\n    \"percentage\": \"22.50\",\n    \"status\": \"Active\",\n    \"comments\": \"Elite institutional partner tier.\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""]
+				},
+				"description": "Create a new growth level. NET_ID is auto-generated automatically."
+			},
+			"response": []
+		},
+		{
+			"name": "7. Create New Record with File Attachment (Multipart)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Role",
+						"value": "CFO"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "level",
+							"value": "Tier 7 - Crown Heritage",
+							"type": "text"
+						},
+						{
+							"key": "lower_range",
+							"value": "3000000.01",
+							"type": "text"
+						},
+						{
+							"key": "upper_range",
+							"value": "5000000.00",
+							"type": "text"
+						},
+						{
+							"key": "percentage",
+							"value": "25.00",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "Active",
+							"type": "text"
+						},
+						{
+							"key": "comments",
+							"value": "Top institutional bracket with charter file attached.",
+							"type": "text"
+						},
+						{
+							"key": "attachment",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""]
+				},
+				"description": "Create new record with attached document."
+			},
+			"response": []
+		},
+		{
+			"name": "8. Update Record (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Role",
+						"value": "CFO"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"level\": \"Tier 1 - Bronze Foundation (Revised)\",\n    \"lower_range\": \"0.00\",\n    \"upper_range\": \"50000.00\",\n    \"percentage\": \"3.00\",\n    \"status\": \"Active\",\n    \"comments\": \"Updated base rate to 3%.\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/{{sample_id}}/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", "{{sample_id}}", ""]
+				},
+				"description": "Full update of a growth level record."
+			},
+			"response": []
+		},
+		{
+			"name": "9. Partial Update Record (PATCH)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Role",
+						"value": "DGM"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"comments\": \"Reviewed and approved by DGM for current quarter.\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/{{sample_id}}/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", "{{sample_id}}", ""]
+				},
+				"description": "Partial update of specific fields."
+			},
+			"response": []
+		},
+		{
+			"name": "10. Download Attachment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/{{sample_id}}/download_attachment/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", "{{sample_id}}", "download_attachment", ""]
+				},
+				"description": "Download the binary attachment associated with a record."
+			},
+			"response": []
+		},
+		{
+			"name": "11. Delete Record",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-User-Role",
+						"value": "CFO"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/{{sample_id}}/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", "{{sample_id}}", ""]
+				},
+				"description": "Delete a record. Allowed only for CFO role."
+			},
+			"response": []
+		},
+		{
+			"name": "12. Validation Test - Range Overlap (Expect 400)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"level\": \"Illegal Overlap Level\",\n    \"lower_range\": \"25000.00\",\n    \"upper_range\": \"75000.00\",\n    \"percentage\": \"5.00\",\n    \"status\": \"Active\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""]
+				},
+				"description": "Tests range overlap rejection. Returns HTTP 400."
+			},
+			"response": []
+		},
+		{
+			"name": "13. Validation Test - Percentage Limit (Expect 400)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"level\": \"Excess Percentage Level\",\n    \"lower_range\": \"5000000.01\",\n    \"upper_range\": \"6000000.00\",\n    \"percentage\": \"125.00\",\n    \"status\": \"Active\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""]
+				},
+				"description": "Tests percentage exceeding 100%. Returns HTTP 400."
+			},
+			"response": []
+		},
+		{
+			"name": "14. RBAC Test - RM Read-Only Denied (Expect 403)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Role",
+						"value": "RM"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"level\": \"RM Unauthorized Creation\",\n    \"lower_range\": \"7000000.01\",\n    \"upper_range\": \"8000000.00\",\n    \"percentage\": \"10.00\",\n    \"status\": \"Active\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mi-net-growth-levels/",
+					"host": ["{{base_url}}"],
+					"path": ["mi-net-growth-levels", ""]
+				},
+				"description": "Tests Relationship Manager (RM) write restriction. Returns HTTP 403 Forbidden."
+			},
+			"response": []
+		}
+	]
+}
